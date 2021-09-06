@@ -12,11 +12,8 @@ display_message() {
 	local message="$1"
 
 	# display_duration defaults to 5 seconds, if not passed as an argument
-	if [ "$#" -eq 2 ]; then
-		local display_duration="$2"
-	else
-		local display_duration="5000"
-	fi
+	local display_duration="5000"
+	[[ "$#" -eq 2 ]] && display_duration="$2"
 
 	# saves user-set 'display-time' option
 	local saved_display_time
@@ -49,9 +46,7 @@ get_engine() {
 # The last grep is required to remove non-digits from version such as "3.0a".
 tmux_version="$(tmux -V | cut -d ' ' -f 2 | grep -Eo '[0-9\.]+')"
 tmux-is-at-least() {
-	if [[ $tmux_version == "$1" ]]; then
-		return 0
-	fi
+	[[ $tmux_version == $1 ]] && return 0
 
 	IFS='.' read -r -a tver <<< "$tmux_version"
 	IFS='.' read -r -a wver <<< "$1"
